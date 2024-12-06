@@ -142,14 +142,3 @@ SELECT * FROM GenerateRestockList();
 4. Use the functions in `functions.sql` to interact with the database.
 
 ---
-
-## **Contributors**
-- **Jeerawat Lappornprasert**  
-  - Student ID: 6580951
-
----
-
-## **License**
-This project is open for educational and personal use. Contributions and modifications are welcome. Attribution is appreciated.
-
----
