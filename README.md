@@ -4,141 +4,229 @@
 ## **Overview**
 The Household Inventory Management System is a database project designed to help users efficiently manage household items across multiple properties. Whether managing a primary home, vacation house, or rental property, this system provides an organized solution for tracking inventory, preventing redundancy, and ensuring essential supplies are always stocked.
 
-This project includes:
-- Database schema and ER diagrams for a structured design.
-- SQL scripts for table creation, functions, and sample data.
-- Documentation for better understanding and usage.
-
 ---
 
 ## **Features**
-1. **Inventory Management:**
-   - Track quantities, expiration dates, and restock thresholds for household items.
-   - Manage inventory for multiple properties with detailed information.
-
-2. **Purchase History:**
-   - View historical purchases, including item details, quantity, price, and vendor.
-
-3. **Shopping List:**
-   - Create shopping lists with item quantities, prices, and notes.
-
-4. **Vendor Management:**
-   - Maintain vendor details such as contact information and location.
-
-5. **Notifications:**
-   - Identify items nearing expiration or low in stock.
-
----
-
-## **Project Files**
-1. **SQL Scripts**:
-   - **`create_table.sql`**: SQL script for creating database tables.
-   - **`functions.sql`**: Contains PL/pgSQL functions for business logic.
-   - **`sample_data.sql`**: Provides initial sample data for testing.
-
-2. **Documentation**:
-   - **`Housekeeper.docx`**: Detailed project description.
-   - **`Presentation.pdf`**: Overview of the project for presentations.
-   - **`Database schema.pdf`**: PDF version of the database schema.
-   - **`ER diagram.pdf`**: ER diagram illustrating relationships.
+1. **Inventory Management**: Track item quantities, expiration dates, and thresholds.
+2. **Purchase History**: View detailed historical purchases.
+3. **Vendor Management**: Track vendor details, including aisle information.
+4. **Shopping Lists**: Create and manage detailed shopping lists.
+5. **Notifications**: Identify low stock or expiring items.
 
 ---
 
 ## **Functions Overview**
+This section explains 14 functions with descriptions, use cases, SQL examples, and sample outputs when no username is specified (queries all user data).
 
-This project includes several functions to simplify and automate database operations. Below are the functions with examples and brief explanations:
+### **1. GetInventoryDetails**
+**Description**: Retrieves inventory details for all houses. Filter by username or view all users' inventory if no username is provided.
 
-### **1. `GetInventoryDetails`**
-**Description**: Retrieves the details of inventory items stored in various houses. You can filter results by the owner's name or fetch details for all users if no filter is applied.
 **Usage**:
 ```sql
-SELECT * FROM GetInventoryDetails('John Doe');
+SELECT * FROM GetInventoryDetails(NULL);
 ```
-**Example Output**:
-| House         | Item          | Quantity | Unit | Owner     | Expiration  |
-|---------------|---------------|----------|------|-----------|-------------|
-| Main House    | Apples        | 10.00    | pcs  | John Doe  | 2024-12-31  |
-| Vacation Home | WD40          | 5.00     | can  | John Doe  | NULL        |
 
-### **2. `GetShoppingListTotal`**
-**Description**: Calculates the total cost of a specific shopping list based on item quantities and their price per unit.
+**Sample Output**:
+| House         | Item      | Quantity | Unit | Owner       | Expiration  |
+|---------------|-----------|----------|------|-------------|-------------|
+| Main House    | Apples    | 10.00    | pcs  | John Doe    | 2024-12-31  |
+| Vacation Home | WD40      | 5.00     | can  | Jane Smith  | NULL        |
+
+---
+
+### **2. GetShoppingListTotal**
+**Description**: Calculates the total cost of a shopping list. If no list ID is provided, it calculates for all lists.
+
 **Usage**:
 ```sql
-SELECT GetShoppingListTotal(1);
+SELECT GetShoppingListTotal(NULL);
 ```
-**Example Output**:
+
+**Sample Output**:
 | Total Price |
 |-------------|
-| 150.75      |
+| 450.75      |
 
 ---
 
-### **3. `GetLowStockItems`**
-**Description**: Returns items that have fallen below their restock threshold, grouped by house.
+### **3. NotifyLowStock**
+**Description**: Identifies items below the restock threshold. Filter by username or view all users' data.
+
 **Usage**:
 ```sql
-SELECT * FROM GetLowStockItems();
+SELECT * FROM NotifyLowStock(NULL);
 ```
-**Example Output**:
-| House         | Item    | Quantity | Restock Threshold |
-|---------------|---------|----------|-------------------|
-| Main House    | Apples  | 2.00     | 5.00             |
-| Vacation Home | WD40    | 1.00     | 3.00             |
+
+**Sample Output**:
+| House         | Item      | Quantity | Threshold | Owner       |
+|---------------|-----------|----------|-----------|-------------|
+| Main House    | Apples    | 2.00     | 5.00      | John Doe    |
+| Vacation Home | Batteries | 1.00     | 3.00      | Jane Smith  |
 
 ---
 
-### **4. `GetItemsByExpiration`**
-**Description**: Fetches items nearing expiration within a specified number of days.
+### **4. NotifyNearExpiration**
+**Description**: Retrieves items expiring soon. Filter by username and specify the number of days.
+
 **Usage**:
 ```sql
-SELECT * FROM GetItemsByExpiration(7);
+SELECT * FROM NotifyNearExpiration(7, NULL);
 ```
-**Example Output**:
-| House         | Item          | Expiration Date |
-|---------------|---------------|-----------------|
-| Main House    | Milk          | 2024-12-08      |
+
+**Sample Output**:
+| House         | Item      | Expiration Date | Owner       |
+|---------------|-----------|-----------------|-------------|
+| Main House    | Milk      | 2024-12-08      | John Doe    |
+| Vacation Home | Cheese    | 2024-12-10      | Jane Smith  |
 
 ---
 
-### **5. `GetVendorItems`**
-**Description**: Lists items sold by a specific vendor.
+### **5. LocateItem**
+**Description**: Locates a specific item across houses. Specify the item name and filter by username if required.
+
 **Usage**:
 ```sql
-SELECT * FROM GetVendorItems(1);
+SELECT * FROM LocateItem('Apples', NULL);
 ```
-**Example Output**:
-| Vendor Name | Item          | Brand      | Category |
-|-------------|---------------|------------|----------|
-| Makro       | Apples        | Makro Brand| Fruit    |
+
+**Sample Output**:
+| House         | Quantity | Unit | Owner       |
+|---------------|----------|------|-------------|
+| Main House    | 10.00    | pcs  | John Doe    |
 
 ---
 
-### **6. `AddNewItem`**
-**Description**: Adds a new item to the inventory.
+### **6. GetItemsByCategory**
+**Description**: Fetches items by category. Filter results by username if needed.
+
 **Usage**:
 ```sql
-SELECT AddNewItem('Bananas', 'Chiquita', 'Fruit');
+SELECT * FROM GetItemsByCategory('Fruit', NULL);
 ```
+
+**Sample Output**:
+| House         | Item      | Brand        | Quantity | Owner       |
+|---------------|-----------|--------------|----------|-------------|
+| Main House    | Apples    | Fresh Farms  | 10.00    | John Doe    |
 
 ---
 
-### **7. `GenerateRestockList`**
-**Description**: Creates a restock list for items below the threshold, grouped by house.
+### **7. GetTotalSpend**
+**Description**: Calculates the total spend across all purchases. Filter by username if required.
+
 **Usage**:
 ```sql
-SELECT * FROM GenerateRestockList();
+SELECT GetTotalSpend(NULL);
 ```
-**Example Output**:
-| House         | Item          | Quantity Needed |
-|---------------|---------------|-----------------|
-| Main House    | Apples        | 5.00            |
+
+**Sample Output**:
+| Total Spend |
+|-------------|
+| 2000.00     |
 
 ---
 
-## **Setup Instructions**
-1. Install PostgreSQL (or your preferred database management system).
-2. Execute `create_table.sql` to create the database structure.
-3. Populate the database with sample data using `sample_data.sql`.
-4. Use the functions in `functions.sql` to interact with the database.
+### **8. GetTotalSpendByMonth**
+**Description**: Returns the total spend for each month, grouped by user.
+
+**Usage**:
+```sql
+SELECT * FROM GetTotalSpendByMonth(NULL);
+```
+
+**Sample Output**:
+| Month-Year | Total   | Buyer       |
+|------------|---------|-------------|
+| 2024-01    | 500.00  | John Doe    |
+| 2024-02    | 800.00  | Jane Smith  |
 
 ---
+
+### **9. GetTotalSpendByYear**
+**Description**: Summarizes total spend for each year, grouped by user.
+
+**Usage**:
+```sql
+SELECT * FROM GetTotalSpendByYear(NULL);
+```
+
+**Sample Output**:
+| Year | Total   | Buyer       |
+|------|---------|-------------|
+| 2024 | 3000.00 | John Doe    |
+| 2023 | 1500.00 | Jane Smith  |
+
+---
+
+### **10. GetMostPurchasedItems**
+**Description**: Identifies the most frequently purchased items, grouped by user.
+
+**Usage**:
+```sql
+SELECT * FROM GetMostPurchasedItems(NULL, 5);
+```
+
+**Sample Output**:
+| Item         | Total Quantity | User        |
+|--------------|----------------|-------------|
+| Apples       | 100.00         | John Doe    |
+
+---
+
+### **11. LocateItemInVendor**
+**Description**: Locates an item in a vendor's aisle.
+
+**Usage**:
+```sql
+SELECT * FROM LocateItemInVendor('Makro', 'Apples');
+```
+
+**Sample Output**:
+| Aisle Name | Aisle Number |
+|------------|--------------|
+| Fruits     | 3            |
+
+---
+
+### **12. GetItemPurchaseHistory**
+**Description**: Provides the purchase history for a specific item.
+
+**Usage**:
+```sql
+SELECT * FROM GetItemPurchaseHistory('Apples');
+```
+
+**Sample Output**:
+| User       | Purchase Date | Quantity | Price |
+|------------|---------------|----------|-------|
+| John Doe   | 2024-01-01    | 5.00     | 10.00 |
+
+---
+
+### **13. GetVendorTotalSpend**
+**Description**: Summarizes total spending for each vendor.
+
+**Usage**:
+```sql
+SELECT * FROM GetVendorTotalSpend(NULL);
+```
+
+**Sample Output**:
+| Vendor Name | Total Spend |
+|-------------|-------------|
+| Makro       | 500.00      |
+
+---
+
+### **14. TrackItemAcrossVendors**
+**Description**: Tracks item purchases across all vendors.
+
+**Usage**:
+```sql
+SELECT * FROM TrackItemAcrossVendors('Apples');
+```
+
+**Sample Output**:
+| Vendor Name | Total Quantity | Purchase Date |
+|-------------|----------------|---------------|
+| Makro       | 20.00          | 2024-01-15    |
