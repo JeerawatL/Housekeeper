@@ -58,7 +58,7 @@ SELECT * FROM GetInventoryDetails('John Doe');
 | House         | Item          | Quantity | Unit | Owner     | Expiration  |
 |---------------|---------------|----------|------|-----------|-------------|
 | Main House    | Apples        | 10.00    | pcs  | John Doe  | 2024-12-31  |
-| Vacation Home | Multipurpose  | 5.00     | pcs  | John Doe  | NULL        |
+| Vacation Home | WD40          | 5.00     | pcs  | John Doe  | NULL        |
 
 ### **2. `GetShoppingListTotal`**
 **Description**: Calculates the total cost of a specific shopping list based on item quantities and their price per unit.
