@@ -58,7 +58,7 @@ SELECT * FROM GetInventoryDetails('John Doe');
 | House         | Item          | Quantity | Unit | Owner     | Expiration  |
 |---------------|---------------|----------|------|-----------|-------------|
 | Main House    | Apples        | 10.00    | pcs  | John Doe  | 2024-12-31  |
-| Vacation Home | WD40          | 5.00     | pcs  | John Doe  | NULL        |
+| Vacation Home | WD40          | 5.00     | can  | John Doe  | NULL        |
 
 ### **2. `GetShoppingListTotal`**
 **Description**: Calculates the total cost of a specific shopping list based on item quantities and their price per unit.
@@ -80,10 +80,10 @@ SELECT GetShoppingListTotal(1);
 SELECT * FROM GetLowStockItems();
 ```
 **Example Output**:
-| House         | Item          | Quantity | Restock Threshold |
-|---------------|---------------|----------|-------------------|
-| Main House    | Apples        | 2.00     | 5.00             |
-| Vacation Home | Multipurpose  | 1.00     | 3.00             |
+| House         | Item    | Quantity | Restock Threshold |
+|---------------|---------|----------|-------------------|
+| Main House    | Apples  | 2.00     | 5.00             |
+| Vacation Home | WD40    | 1.00     | 3.00             |
 
 ---
 
